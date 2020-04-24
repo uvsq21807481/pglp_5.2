@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Groupe implements Serializable{
 
+    private int ID;
     private List<Personnel> groupe;
     private String name;
 
@@ -18,6 +19,8 @@ public class Groupe implements Serializable{
     public void addPersonnel(Personnel p){
         this.groupe.add(p);
     }
+
+    public int getID() { return ID; }
 
     public List<Personnel> getGroupe(){
         List<Personnel> liste = Collections.unmodifiableList(groupe);
