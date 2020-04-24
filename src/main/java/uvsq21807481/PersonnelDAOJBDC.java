@@ -126,5 +126,16 @@ public class PersonnelDAOJBDC extends DAO<Personnel>{
         catch (SQLException e){
             e.printStackTrace();
         }
+
+        try {
+            PreparedStatement prepare = connect.prepareStatement(
+                    "DELETE * FROM Tel WHERE IDOwner = ?");
+            prepare.setString(1, Integer.toString(obj.getID()));
+            int result = prepare.executeUpdate();
+            assert result == 1;
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
     }
 }
