@@ -2,10 +2,10 @@ package uvsq21807481;
 
 import java.sql.*;
 
-public class PersonnelDAOJBDC extends DAO<Personnel>{
+public class PersonnelDAOJDBC extends DAO<Personnel>{
 
-    public PersonnelDAOJBDC() {
-        String db = "jbdc:derby:dataDB\\jbdcDB;create=true";
+    public PersonnelDAOJDBC() {
+        String db = "jdbc:derby:dataDB\\jdbcDB;create=true";
         try {
             connect = DriverManager.getConnection(db);
         }

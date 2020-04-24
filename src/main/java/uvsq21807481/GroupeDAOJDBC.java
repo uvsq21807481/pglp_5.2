@@ -2,10 +2,10 @@ package uvsq21807481;
 
 import java.sql.*;
 
-public class GroupeDAOJBDC extends DAO<Groupe>{
+public class GroupeDAOJDBC extends DAO<Groupe>{
 
-    public GroupeDAOJBDC() {
-        String db = "jbdc:derby:dataDB\\jbdcDB;create=true";
+    public GroupeDAOJDBC() {
+        String db = "jdbc:derby:dataDB\\jdbcDB;create=true";
         try {
             connect = DriverManager.getConnection(db);
         }
