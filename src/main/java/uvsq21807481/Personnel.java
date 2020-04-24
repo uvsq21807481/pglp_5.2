@@ -7,6 +7,7 @@ import java.util.List;
 
 public final class Personnel extends Equipe implements Serializable{
 
+    private final int ID;
     private final String lastName;
     private final String firstName;
     private final String job;
@@ -14,13 +15,15 @@ public final class Personnel extends Equipe implements Serializable{
     private final List<String> phone;
 
     public static class Builder{
+        private final int ID;
         private final String lastName;
         private final String firstName;
         private final String job;
         private final LocalDate birth;
         private final List<String> phone;
 
-        public Builder(String lastName, String firstName, String date, String job){
+        public Builder(int ID, String lastName, String firstName, String date, String job){
+            this.ID = ID;
             this.lastName = lastName;
             this.firstName = firstName;
             this.birth = LocalDate.parse(date);
@@ -39,12 +42,15 @@ public final class Personnel extends Equipe implements Serializable{
     }
 
     public Personnel(Builder b){
+        this.ID = b.ID;
         this.lastName = b.lastName;
         this.firstName = b.firstName;
         this.birth = b.birth;
         this.job = b.job;
         this.phone = b.phone;
     }
+
+    public int getID() { return ID; }
 
     public String getLastName(){
         return lastName;

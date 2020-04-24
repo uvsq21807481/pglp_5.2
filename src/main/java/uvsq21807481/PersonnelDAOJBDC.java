@@ -24,17 +24,18 @@ public class PersonnelDAOJBDC extends DAO<Personnel>{
     public static void createTable(Connection co) throws SQLException {
         PreparedStatement prepare;
         if(!checkTable("PERSONNEL", co)) {
-            prepare = co.prepareStatement("CREATE TABLE Personnel (nom VARCHAR(32) PRIMARY KEY, "
-                                                                        + "prenom VARCHAR(32) NOT NULL, "
+            prepare = co.prepareStatement("CREATE TABLE Personnel (IDPersonnel int PRIMARY KEY, "
+                                                                        + "lastName VARCHAR(32) NOT NULL, "
+                                                                        + "firstName VARCHAR(32) NOT NULL, "
                                                                         + "birth DATE NOT NULL, "
-                                                                        + "fonction VARCHAR(50))");
+                                                                        + "job VARCHAR(50))");
             prepare.executeUpdate();
         }
 
         if(!checkTable("TEL", co)) {
             prepare = co.prepareStatement("CREATE TABLE Tel (numTel INT(10) PRIMARY KEY, "
-                                                                + "IDProprio INT NOT NULL, "
-                                                                + "FOREIGN KEY (IDProprio) REFERENCES Personnel(nom))");
+                                                                + "IDOwner INT NOT NULL, "
+                                                                + "FOREIGN KEY (IDOwner) REFERENCES Personnel(IDPersonnel))");
             prepare.executeUpdate();
         }
     }
@@ -43,11 +44,12 @@ public class PersonnelDAOJBDC extends DAO<Personnel>{
     public Personnel create(Personnel obj){
         try {
             PreparedStatement prepare = connect.prepareStatement(
-                    "INSERT INTO personnel (nom, prenom, birth, fonction) VALUES (?, ?, ?, ?)");
-            prepare.setString(1, obj.getLastName());
-            prepare.setString(2, obj.getFirstName());
-            prepare.setString(3, obj.getBirth().toString());
-            prepare.setString(3, obj.getJob());
+                    "INSERT INTO personnel (ID, lastName, firstName, birth, job) VALUES (?, ?, ?, ?)");
+            prepare.setString(1, Integer.toString(obj.getID()));
+            prepare.setString(2, obj.getLastName());
+            prepare.setString(3, obj.getFirstName());
+            prepare.setString(4, obj.getBirth().toString());
+            prepare.setString(5, obj.getJob());
             int result = prepare.executeUpdate();
             assert result == 1;
         }
@@ -57,7 +59,7 @@ public class PersonnelDAOJBDC extends DAO<Personnel>{
 
         for(String tel : obj.getPhone()) {
             try {
-                String query = "INSERT INTO Tel VALUES " + tel + ", " + obj.getLastName() + "),";
+                String query = "INSERT INTO Tel VALUES " + tel + ", " + obj.getID() + "),";
                 PreparedStatement prepare = connect.prepareStatement(query);
                 prepare.executeUpdate();
             }
@@ -74,11 +76,12 @@ public class PersonnelDAOJBDC extends DAO<Personnel>{
         Personnel p = null;
         try {
             PreparedStatement prepare = connect.prepareStatement(
-                    "SELECT * FROM personnel WHERE lastName = ?");
+                    "SELECT * FROM personnel WHERE IDPersonnel = ?");
             prepare.setString(1, id);
             ResultSet result = prepare.executeQuery();
             if(result.first()){
                 p = new Personnel.Builder(
+                        Integer.parseInt(result.getString("IDPersonnel")),
                         result.getString("lastName"),
                         result.getString("firstName"),
                         result.getString("birth"),
@@ -96,11 +99,11 @@ public class PersonnelDAOJBDC extends DAO<Personnel>{
 
         try {
             PreparedStatement prepare = connect.prepareStatement(
-                    "UPDATE personnel SET lastName = ?, firstName = ?, job = ? WHERE lastName = ?");
+                    "UPDATE personnel SET lastName = ?, firstName = ?, job = ? WHERE IDPersonnel = ?");
             prepare.setString(1, obj.getLastName());
             prepare.setString(2, obj.getFirstName());
             prepare.setString(3, obj.getJob());
-            prepare.setString(4, "lastName");
+            prepare.setString(4, Integer.toString(obj.getID()));
             int result = prepare.executeUpdate();
             assert result == 1;
         }
@@ -115,8 +118,8 @@ public class PersonnelDAOJBDC extends DAO<Personnel>{
 
         try {
             PreparedStatement prepare = connect.prepareStatement(
-                    "DELETE * FROM personnel WHERE lastName = ?");
-            prepare.setString(1, obj.getLastName());
+                    "DELETE * FROM personnel WHERE IDPersonnel = ?");
+            prepare.setString(1, Integer.toString(obj.getID()));
             int result = prepare.executeUpdate();
             assert result == 1;
         }
