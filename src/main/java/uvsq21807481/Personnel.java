@@ -20,10 +20,10 @@ public final class Personnel extends Equipe implements Serializable{
         private final LocalDate birth;
         private final List<String> phone;
 
-        public Builder(String lastName, String firstName, String job){
+        public Builder(String lastName, String firstName, String date, String job){
             this.lastName = lastName;
             this.firstName = firstName;
-            this.birth = LocalDate.now();
+            this.birth = LocalDate.parse(date);
             this.job = job;
             this.phone = new ArrayList<>();
         }
@@ -53,6 +53,8 @@ public final class Personnel extends Equipe implements Serializable{
     public String getFirstName() {
         return firstName;
     }
+
+    public LocalDate getBirth() { return birth; }
 
     public String getJob() {
         return job;
