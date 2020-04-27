@@ -43,7 +43,7 @@ public class GroupeDAOJDBC extends DAO<Groupe>{
     public Groupe create(Groupe obj){
         try {
             PreparedStatement prepare = connect.prepareStatement(
-                    "INSERT INTO groupe (id, name) VALUES (?)");
+                    "INSERT INTO Groupe (id, name) VALUES (?, ?)");
             prepare.setString(1, Integer.toString(obj.getID()));
             prepare.setString(2, obj.getName());
             int result = prepare.executeUpdate();
@@ -61,7 +61,7 @@ public class GroupeDAOJDBC extends DAO<Groupe>{
         Groupe g = null;
         try {
             PreparedStatement prepare = connect.prepareStatement(
-                    "SELECT * FROM groupe WHERE name = ?");
+                    "SELECT * FROM groupe WHERE IDGroup = ?");
             prepare.setString(1, id);
             ResultSet result = prepare.executeQuery();
             if(result.first()){
@@ -79,9 +79,9 @@ public class GroupeDAOJDBC extends DAO<Groupe>{
 
         try {
             PreparedStatement prepare = connect.prepareStatement(
-                    "UPDATE groupe SET name = ? WHERE name = ?");
+                    "UPDATE groupe SET name = ? WHERE IDGroup = ?");
             prepare.setString(1, obj.getName());
-            prepare.setString(2, "name");
+            prepare.setString(2, Integer.toString(obj.getID()));
             int result = prepare.executeUpdate();
             assert result == 1;
         }
@@ -96,8 +96,8 @@ public class GroupeDAOJDBC extends DAO<Groupe>{
 
         try {
             PreparedStatement prepare = connect.prepareStatement(
-                    "DELETE * FROM groupe WHERE lastName = ?");
-            prepare.setString(1, obj.getName());
+                    "DELETE * FROM groupe WHERE IDGroup = ?");
+            prepare.setString(1, Integer.toString(obj.getID()));
             int result = prepare.executeUpdate();
             assert result == 1;
         }
